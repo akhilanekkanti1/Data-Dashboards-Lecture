@@ -22,7 +22,7 @@ library(dplyr)
 
 ```{r load-n-clean-data}
 
-raw <- import(here("data", "feb17.csv")) 
+raw <- import(here("data", "feb17_an.csv")) 
 View(raw)
 
 long <- raw %>% 
@@ -62,27 +62,6 @@ long <- raw %>%
 View(long)
 
 ods <- long %>%
-  mutate(district = factor(id),
-         district = dplyr::recode(district,
-                                'Siuslaw High School' = "Siuslaw",
-                                'McKenzie High School' = "McKenzie",
-                                'South Eugene High School' = "4J",
-                                'Oakridge High School' = "Oakridge",
-                                'Willamette High School' = "Bethel",
-                                'Early College & Career Options (ECCO)' = "4J"))
-head(ods)
-
-```
-
-```{r plot1}
-
-ggplot(raw, aes(PATOTR)) +
-  geom_bar() 
-
-ggplot(raw, aes(Q157)) +
-  geom_bar() 
-
-raw %>%
   mutate(district = factor(Q1),
          district = dplyr::recode(district,
                                 'Siuslaw High School' = "Siuslaw",
@@ -90,10 +69,109 @@ raw %>%
                                 'South Eugene High School' = "4J",
                                 'Oakridge High School' = "Oakridge",
                                 'Willamette High School' = "Bethel",
-                                'Early College & Career Options (ECCO)' = "4J")) %>% 
-  ggplot(aes(PATOTR)) +
+                                'Early College & Career Options (ECCO)' = "4J"),
+         stu_gender = as.factor(stu_gender))
+head(ods)
+
+```
+
+```{r distributions}
+
+ggplot(raw, aes(PATOTR)) +
+  geom_bar() 
+
+ggplot(raw, aes(Q157)) +
+  geom_bar() 
+
+ggplot(ods, aes(PATOTR)) +
   geom_bar() +
   facet_wrap(~district)
+
+
+
+```
+
+#Rates of Abuse By Gender and District
+```{r plot1}
+
+ggplot(ods, aes(as.factor(stu_gender), PATOTR)) +
+	geom_violin(aes(fill = stu_gender), size = 1) +
+	coord_flip() +
+	facet_wrap(~district) +
+	labs(y = "Physical Abuse Scores",
+	     x = "Gender",
+	     title = "Distribution of Abuse Rates",
+	     subtitle = "Results displayed by gender and school district") 
+
+#same for sexual abuse
+ggplot(ods, aes(as.factor(stu_gender), PATOTR)) +
+	geom_violin(aes(fill = stu_gender), size = 1) +
+	coord_flip() +
+	facet_wrap(~district) +
+	labs(y = "Physical Abuse Scores",
+	     x = "Gender",
+	     title = "Distribution of Abuse Rates",
+	     subtitle = "Results displayed by gender and school district") 
+	
+	
+#playing with geom_ribbon	
+ggplot(ods, aes(district, PATOTR)) +
+  geom_ribbon(aes(fill = stu_gender, 
+                  color = stu_gender,
+                  ymin = 0,
+                  ymax = PATOTR), alpha = 0.8)
+
+```
+
+#Neighborhood safety by District and ethnicity
+```{r plot2}
+
+#yikes --- definitely need to find a better viz for this...
+ods %>%
+ggplot(aes(district, as.factor(ethnicity))) +
+    geom_tile(aes(fill = Q24))
+
+# ods %>%
+# ggplot(aes(district, as.factor(ethnicity))) +
+#     geom_col() +
+#   facet_wrap(~Q24)
+```
+
+#Total Exposure to Violence by feelings of safety and school district
+```{r}
+
+# safe <- ods %>% 
+#   filter(Q162 == "Yes") 
+# 
+# safe
+# 
+# View(safe)
+# ods %>% 
+#   pivot_longer(
+#     cols = c("Q163_1":"Q163_13"),
+#     names_to = "toss",
+#     values_to =  "stu_gender",
+#     values_drop_na = TRUE
+#   )
+
+
+
+ods %>% 
+  filter(!is.na(Q162),
+         Q162 == "No" |
+           Q162 == "Yes") %>%
+ggplot(aes(district, IPVTOT)) +
+  geom_ribbon(aes(fill = Q162, 
+                  color = Q162,
+                  ymin = 0,
+                  ymax = IPVTOT), alpha = 0.8)
+
+ods %>% 
+  filter(!is.na(Q162),
+         Q162 == "No" |
+           Q162 == "Yes") %>%  
+ggplot(aes(district, PATOTR)) +
+  geom_col(aes(fill = Q162), position = "dodge") 
 
 ```
 
