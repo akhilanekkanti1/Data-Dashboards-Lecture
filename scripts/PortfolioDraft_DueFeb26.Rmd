@@ -112,7 +112,8 @@ ggplot(ods, aes(as.factor(stu_gender), PATOTR)) +
 	     x = "Gender",
 	     title = "Distribution of Abuse Rates",
 	     subtitle = "Results displayed by gender and school district") 
-	
+
+# Mike: the physical abuse and sexual abuse plots are the same	
 	
 #playing with geom_ribbon	
 ggplot(ods, aes(district, PATOTR)) +
@@ -175,3 +176,29 @@ ggplot(aes(district, PATOTR)) +
 
 ```
 
+
+
+Mike's comments:
+
+Akhila, thanks for sharing your final project draft with me.  I think you have a really interesting data set and I am looking forward to your final presentation next week.  Following are some comments (organized by letter in the assignment instruction on the course website):
+
+Strengths (a):
+1.  Variety of plots.  I know these are a work in progress, but I like the different plots (violin, ribbon, bar, heatmap) you are experimenting with to find the best way to communicate the message from the data.
+2.  Breaking down variables in meaningful ways.  The use of facet wrap and fill for your violin plot seems helpful for including more grouping variables in a single display.  As an uninformed reader it seems from the violin plot that there is more variety in gender reporting in 4J and more abuse.
+3.  Final bar plot.  The final bar plot is also easy to interpret, comparing the PATOTR variable across districts according to binary responses on Q162.  Dodging the bars allows for easy comparison within and across districts.
+  
+
+Learning from script (b):
+1.  I appreciate how you have divided your script up into meaningful chunks.  Each chunk serves a specific purpose, from package loadings and data cleaning to separate chunks for each visualization.  This presents a clean and orderly flow that makes your script very easy to follow.
+2.  Relatedly, I like that you label each chunk, making it clear to an outside reader the reason for the chunk.
+3.  Importantly, I appreciated seeing your approach to cleaning data.  This is something I don't do very well, so I learned from your example to fully prepare the data before beginning any visualization work.
+
+
+Suggestions (c):
+I know these plots are working drafts, so these suggestions are probably things you have already considered.
+1.  Variables.  I wonder how you could more explicitly explain what the variables are for the uninformed reader.  I understand district, but am pretty lost after that since I'm not familiar with education research.  If the intended audience is an educational researcher, disregard.  Instead of number genders from 1 to 8, perhaps you could display a text description for each.
+2.  Labels.  Relatedly, also of benefit to the uninformed reader could be the use of titles, subtitles, or captions to explain and direct my attention further to your key message with each plot.
+
+Great work, and good luck on your final project!
+
+Mike
