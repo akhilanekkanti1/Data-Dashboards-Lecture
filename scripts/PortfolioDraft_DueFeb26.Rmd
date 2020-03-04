@@ -44,7 +44,7 @@ long <- raw %>%
     values_to = "ethnicity",
     values_drop_na = TRUE
   ) %>% 
-  dplyr::select(c("id", "Q1", "Q2",
+  select(c("id", "Q1", "Q2",
            "stu_gender", "live_with", "ethnicity",
            "Q9":"Q15",
            "Q17":"Q28",
@@ -63,7 +63,7 @@ View(long)
 
 ods <- long %>%
   mutate(district = factor(Q1),
-         district = dplyr::recode(district,
+         district = recode(district,
                                 'Siuslaw High School' = "Siuslaw",
                                 'McKenzie High School' = "McKenzie",
                                 'South Eugene High School' = "4J",
@@ -74,6 +74,10 @@ ods <- long %>%
 head(ods)
 
 ```
+
+Hi Akhila,
+Your code is super neat! I learned a lot from your data management. My only suggestion is that since you have dplyr loaded in your setup chunk, you may not need to call it every time you use its function. I've deleted the two "dplyr::" for you.
+Claire
 
 ```{r distributions}
 
@@ -86,7 +90,6 @@ ggplot(raw, aes(Q157)) +
 ggplot(ods, aes(PATOTR)) +
   geom_bar() +
   facet_wrap(~district)
-
 
 
 ```
@@ -129,13 +132,18 @@ ggplot(ods, aes(district, PATOTR)) +
 #yikes --- definitely need to find a better viz for this...
 ods %>%
 ggplot(aes(district, as.factor(ethnicity))) +
-    geom_tile(aes(fill = Q24))
+  geom_tile(aes(fill = Q24))
 
 # ods %>%
 # ggplot(aes(district, as.factor(ethnicity))) +
 #     geom_col() +
 #   facet_wrap(~Q24)
 ```
+
+Hi Akhila,
+I like the plot above and it makes total sense for me to pick out the colors and their meanings but I think since Q24 is not continous maybe you want to consider another plot other than geom_tile, which is designed to display change brought by continous variable.
+Claire
+
 
 #Total Exposure to Violence by feelings of safety and school district
 ```{r}
@@ -175,3 +183,8 @@ ggplot(aes(district, PATOTR)) +
 
 ```
 
+I really like this plot and it's intuitive and informative. I think maybe you want to add title and modify the labels for x and y axis to better communicate as a stand-alone figure, especially when you use it in a paper, it's better interpretable by its own with titles and footnotes.
+
+Thanks for sharing your great work!
+
+Claire
