@@ -87,7 +87,7 @@ ggplot(ods, aes(PATOTR)) +
   geom_bar() +
   facet_wrap(~district)
 
-
+# Suggestion: What does PATOTR mean? Rename to something that helps viewer understand the x-axis. (Sorry if I missed this info somewhere!)
 
 ```
 
@@ -121,6 +121,8 @@ ggplot(ods, aes(district, PATOTR)) +
                   ymin = 0,
                   ymax = PATOTR), alpha = 0.8)
 
+# Suggestion: Geom_violin - Nice way to display this info by gender and school district. Of course, you'll want to swap out the numbers for labels in the legend, and also you could reorder the legend to mirror the plots (e.g. the plots go 1 to 9 bottom to top, but the legend goes 1 to 9 top to bottom. Make them the same?). Also, I wonder about having too many categories on the legend... is there a way to simplify this without losing info?
+
 ```
 
 #Neighborhood safety by District and ethnicity
@@ -135,6 +137,8 @@ ggplot(aes(district, as.factor(ethnicity))) +
 # ggplot(aes(district, as.factor(ethnicity))) +
 #     geom_col() +
 #   facet_wrap(~Q24)
+
+# Suggestion: I like the idea of showing neighborhood safety by district and ethnicity! I'm thinking about other ways you could plot this... maybe have 5 distribution plots, one for each district. And, similar to your violin plot, a depiction of perceived level of safety for each ethnicity?
 ```
 
 #Total Exposure to Violence by feelings of safety and school district
