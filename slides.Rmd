@@ -1,0 +1,295 @@
+---
+title: "Oregon Child Abuse Prevalence Study - Pilot"
+subtitle: "Translation and Implementation"
+author: "Akhila Nekkanti"
+date: "March 9th, 2020"
+output:
+  xaringan::moon_reader:
+    css: [metropolis, metropolis-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+---
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+
+
+library(tidyverse)
+library(here)
+library(rio)
+library(dplyr)
+library(likert)
+library(colorblindr)
+library(ggridges)
+library(icon)
+library(gridExtra)
+theme_set(theme_minimal(10))
+
+
+
+
+```
+
+```{r datacleaning, include=FALSE}
+
+raw <- import(here("data", "feb17_an.csv")) 
+
+
+long <- raw %>% 
+  pivot_longer(
+    cols = c("Q3_1":"Q3_7", "Q3_8":"Q3_10"),
+    names_to = "toss",
+    values_to =  "stu_gender",
+    values_drop_na = TRUE
+  ) %>% 
+  pivot_longer(
+    cols = c("Q4_1":"Q4_19"),
+    names_to = "toss1",
+    values_to = "live_with",
+    values_drop_na = TRUE
+  ) %>% 
+  pivot_longer(
+    cols = c("Q16_1":"Q16_15","Q16_16"),
+    names_to = "toss2",
+    values_to = "ethnicity",
+    values_drop_na = TRUE
+  ) %>% 
+  dplyr::select(c("id", "Q1", "Q2",
+           "stu_gender", "live_with", "ethnicity",
+           "Q9":"Q15",
+           "Q17":"Q28",
+           "Q46":"Q51B", 
+           "Q52A", "Q52B", "Q52D",
+           "Q53A", "Q53B", "Q53D",
+           "Q54A", "Q54B", "Q54D",
+           "Q55A", "Q56A", "Q57A",
+           "Q58": "Q61",
+           "Q106":"Q108",
+           "Q162":"Q163_13",
+           "SATOT":"PACFPERP"
+  ))
+  
+
+ods <- long %>%
+  mutate(district = factor(Q1),
+         district = dplyr::recode(district,
+                                'Siuslaw High School' = "Siuslaw",
+                                'McKenzie High School' = "McKenzie",
+                                'South Eugene High School' = "4J",
+                                'Oakridge High School' = "Oakridge",
+                                'Willamette High School' = "Bethel",
+                                'Early College & Career Options (ECCO)' = "4J"),
+         stu_gender = as.factor(stu_gender))
+
+```
+ 
+
+--- 
+class: center, middle
+### Policymakers rely on publically available, easily digestible data to allocate funds and resources. It is critical then, that such data is accurate. 
+
+
+---
+class: center, middle
+
+### In Oregon these data are dependent on either retrospective surveys with adults (Oregon BRFFS), youth convenience sample surveys with fewer than 10 abuse and neglect items (Oregon Healthy Teens Survey, Oregon Student Wellness Survey), and reports to child protective services (Children’s Bureau, 2019). 
+
+---
+## To get a better picture of how abuse and neglect rates in Lane County look, I will present three plots.
+
+--
+1. How physical abuse rates relate to students telling somebody about their experience. 
+2. How physical abuse rates vary by age school district. 
+3. How abuse rates (by adults) are related to harrassment in school. 
+
+---
+class: center, middle
+
+```{r echo=FALSE, tidy=FALSE}
+#here i'm trying to visualize how many of those who have experienced abuse have told someone about it. And whether this varies by school district. 
+
+p <- ods %>% 
+  filter(Q162 == "Yes" |
+           Q162 == "No")
+ggplot(p, aes(as.factor(Q162), PATOTR)) +
+	geom_violin(aes(fill = Q162), size = 1) +
+	coord_flip() +
+  facet_wrap(~district)
+
+```
+
+---
+```{r echo=FALSE, tidy=FALSE}
+p <- ods %>% 
+  filter(Q162 == "Yes" |
+           Q162 == "No")
+ggplot(p, aes(as.factor(district), PATOTR)) +
+	geom_violin(aes(fill = district), alpha = 0.6) +
+  geom_point(color = "grey40") +
+  facet_wrap(~Q162) +
+  scale_fill_OkabeIto()
+
+```
+
+---
+class: center, middle
+```{r echo=FALSE, tidy=FALSE}
+ggplot(p, aes(x = PATOTR, y = district)) + 
+  geom_density_ridges(aes(fill = Q162),alpha = 0.7) +
+  scale_fill_OkabeIto() +
+  	labs(y = NULL,
+	     x = "Told someone?",
+	     title = "Distribution of Abuse Rates",
+	     subtitle = "Results displayed by disclosure and school district",
+	     fill = NULL) 
+
+
+```
+
+---
+```{r echo=FALSE, tidy=FALSE}
+ggplot(p, aes(as.factor(Q162), PATOTR)) +
+	geom_col(aes(fill = Q162), size = 1) +
+#   geom_violin(aes(color = Q162)) +
+  facet_wrap(~district, ncol = 5) +
+  scale_fill_OkabeIto()+
+	labs(y = "Physical Abuse Scores",
+	     x = "Told someone?",
+	     title = "Distribution of Abuse Rates",
+	     subtitle = "Results displayed by disclosure and school district",
+	     fill = NULL) 
+
+```
+
+---
+```{r echo=FALSE}
+ods %>%
+ggplot(aes(district, as.factor(Q2))) +
+    geom_tile(aes(fill = PATOTR))
+```
+---
+```{r echo=FALSE}
+
+ods %>%
+ggplot(aes(district, as.factor(Q2))) +
+    geom_tile(aes(fill = PATOTR)) +
+  scale_fill_continuous(type = "viridis") +
+  labs(
+    fill = "Physical Abuse Score",
+    x = NULL,
+    y = NULL,
+    title = "Abuse Scores Vary by District and Age"
+  ) +
+  theme(
+    legend.position = "bottom"
+  )
+```
+---
+```{r include=FALSE}
+pl1 <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+ggplot(aes(Q62)) +
+  geom_bar(fill = "cornflowerblue") +
+  labs(
+    x = NULL,
+    title = "Harrassed because of race or ethnicity."
+  ) 
+
+pl2 <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+ggplot(aes(Q63)) +
+  geom_bar(fill = "yellow") +
+  labs(
+    x = NULL,
+    title = "Harassed because someone said you were gay, lesbian, bisexual, or transgenderof race or ethnicity."
+  ) 
+
+pl3 <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+ggplot(aes(Q64)) +
+  geom_bar(fill = "purple") +
+  labs(
+    x = NULL,
+    title = "Harassed because of who your friends are."
+  )
+
+pl4 <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+ggplot(aes(Q65)) +
+  geom_bar(fill = "green") +
+  labs(
+    x = NULL,
+    title = "Harassed because of how you look (weight, clothes, acne, or other physical characteristics)."
+  )
+
+pl5 <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+ggplot(aes(Q66)) +
+  geom_bar(fill = "orange") +
+  labs(
+    x = NULL,
+    title = "Harassed because you received unwanted sexual comments or attention."
+  )
+
+```
+
+
+```{r echo=FALSE}
+gridExtra::grid.arrange(pl1, pl2, pl3, pl4, pl5, nrow=2) 
+
+```
+
+
+---
+```{r eval=FALSE, include=TRUE}
+
+likertdata <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+  mutate(Q62 = as.factor(Q62),
+         Q63 = as.factor(Q63),
+         Q64 = as.factor(Q64),
+         Q65 = as.factor(Q65),
+         Q66 = as.factor(Q66),
+         Q67 = as.factor(Q67))
+
+likertdata %>% 
+  mutate(Q62= fct_recode(Q62,
+                         `0 Times (Never)` ="Never",
+                              `1 time` = "1 Time",
+                              `2 to 5 times` = "2 to 5 Times",
+                              `6 to 12 times` = "6 to 12 Times",
+                              `13 or more times (Very Frequently)` = "13 or More Times",
+                              `I choose not to answer` ="Choose not to answer"))
+
+
+likert_result = likert(likertdata)
+plot(likert_result, type = "bar",
+     cex.lab = 0.3,
+     main = "Higher Order Thinking Skills")
+
+```
+
+
+---
+class: center, middle
+
+# Thanks!
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.org/knitr), and [R Markdown](https://rmarkdown.rstudio.com).

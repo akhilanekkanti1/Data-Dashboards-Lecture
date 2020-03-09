@@ -128,8 +128,11 @@ ggplot(ods, aes(district, PATOTR)) +
 
 #yikes --- definitely need to find a better viz for this...
 ods %>%
-ggplot(aes(district, as.factor(ethnicity))) +
-    geom_tile(aes(fill = Q24))
+ggplot(aes(district, as.factor(Q2))) +
+    geom_tile(aes(fill = PATOTR)) +
+  scale_fill_continuous(type = "viridis")
+
+View(ods)
 
 # ods %>%
 # ggplot(aes(district, as.factor(ethnicity))) +
