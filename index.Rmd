@@ -103,17 +103,18 @@ In Oregon these data are dependent on either retrospective surveys with adults (
 ---
 class: left, middle
 
-**To get a better picture of how abuse and neglect rates in Lane County look, I will present three plots.**
+**To get a better picture of how abuse and neglect rates in Lane County look, the OCAP study directly asks high school students about their current and previous abuse and harrassment experiences.**
+
+I will present three plots that visualize data in informative ways for policymakers. 
 
 --
 1. How abuse rates vary across school districts in Lane County.
 
 --
-2. How people in the community respond when students disclose their experience. 
+2. How people in the community respond when students have disclosed their experience. 
 
 --
-3. How being in foster care relates to who students decide to tell, relative to abuse score. 
-
+3. How being in foster care is associated with students' decision to tell someone, relative to their abuse score. 
 
 ---
 class: center, middle
