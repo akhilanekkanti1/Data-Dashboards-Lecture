@@ -18,10 +18,12 @@ class: center, left
 ```{r setup, include = FALSE}
 
 knitr::opts_chunk$set(
-	echo = FALSE,
+	echo = TRUE,
 	message = FALSE,
 	warning = FALSE
 )
+
+
 library(tidyverse)
 library(here)
 library(rio)
@@ -30,8 +32,7 @@ library(likert)
 library(colorblindr)
 library(ggridges)
 library(scales)
-library(fmsb)
-theme_set(theme_minimal(15))
+theme_set(theme_minimal(10))
 
 
 
@@ -92,7 +93,7 @@ ods <- long %>%
 ```
 
 
-## Policymakers rely on publically available, easily digestible data to allocate funds and resources. It is critical then, that such data is accurate. 
+Policymakers rely on publically available, easily digestible data to allocate funds and resources. It is critical then, that such data is accurate. 
 
 --
 
@@ -101,26 +102,24 @@ In Oregon these data are dependent on either retrospective surveys with adults (
 
 
 ---
-class: left, middle
+class: left, top
 
 **To get a better picture of how abuse and neglect rates in Lane County look, I will present three plots.**
 
 --
-1. How abuse rates vary across school districts in Lane County.
+1. How physical abuse rates relate to students telling somebody about their experience. 
 
 --
-2. How people in the community respond when students disclose their experience. 
+2. How physical abuse rates vary by age school district. 
 
 --
-3. How being in foster care relates to who students decide to tell, relative to abuse score. 
+3. How abuse rates (by adults) are related to harrassment in school. 
 
 
 ---
 class: center, middle
 
-Plot 1.1
-
-```{r plot1.1, echo=FALSE, tidy=FALSE}
+```{r echo=FALSE, tidy=FALSE}
 #here i'm trying to visualize how many of those who have experienced abuse have told someone about it. And whether this varies by school district. 
 
 
@@ -155,43 +154,15 @@ p <- p %>%
   ungroup() 
 
 ggplot(p, aes(as.factor(type_ab), ab_scores)) +
-	geom_violin(aes(fill=Gender)) +
+	geom_violin() +
   facet_wrap(~district) +
   labs(
-    title = "Abuse Rates Across Districts"
+    title = "Plot 1, take 1"
   )
 
 ```
----
-class: center, middle
-
-Plot 1.2
-```{r plot1.2, echo=FALSE, tidy=FALSE}
-
-p %>% 
-  filter(Gender == "Male" |
-         Gender == "Female" |
-           Gender == "Non-binary") %>% 
-ggplot(aes(fct_reorder(district, mean_ab), mean_ab)) +
-  geom_col(aes(fill = Gender), size = 5, position = position_dodge()) +
-  facet_wrap(~type_ab, ncol = 1) +
-  scale_color_brewer(palette = "Dark2") +
-  coord_flip() +
-  labs(
-      title = "Average Abuse Scores",
-  subtitle = "Results displayed by district, gender, and abuse type",
-  x = "",
-  y = "Average Score") +
-  theme_minimal()
-
-```
-
-
 
 ---
-class: center, middle
-
-Plot 1.3
 ```{r echo=FALSE, tidy=FALSE}
 
 p %>% 
@@ -210,10 +181,18 @@ ggplot(aes(as.factor(district), mean_ab)) +
   x = "",
   y = "Average Score") +
   theme_minimal()
+  
+
+# ggplot(p, aes(as.factor(district), 'Physical Abuse')) +
+# 	geom_violin(aes(fill = district), alpha = 0.6) +
+#   geom_point(color = "grey40") +
+#   facet_wrap(~Q162) +
+#   scale_fill_OkabeIto()
 
 ```
 
-
+---
+class: center, middle
 ```{r echo=FALSE, tidy=FALSE}
 # ggplot(p, aes(x = PATOTR, y = district)) + 
 #   geom_density_ridges(aes(fill = Q162),alpha = 0.7) +
@@ -227,6 +206,7 @@ ggplot(aes(as.factor(district), mean_ab)) +
 
 ```
 
+---
 ```{r echo=FALSE, tidy=FALSE}
 # ggplot(p, aes(as.factor(Q162), PATOTR)) +
 # 	geom_col(aes(fill = Q162), size = 1) +
@@ -240,13 +220,54 @@ ggplot(aes(as.factor(district), mean_ab)) +
 # 	     fill = NULL) 
 
 ```
-
 ---
-class: center, middle
+```{r include=FALSE, tidy=FALSE}
 
-Plot 2.1
-```{r plot2.1, include=FALSE, tidy=FALSE}
+ods$IDs <- seq.int(nrow(ods))
 
+tell <- ods %>% 
+  select(Q162, starts_with("Q163"), IDs) %>% 
+  filter(Q162 == "Yes") %>% 
+  mutate(Q163_1 = as.factor(Q163_1),
+         Q163_2 = as.factor(Q163_2),
+         Q163_3 = as.factor(Q163_3),
+         Q163_4 = as.factor(Q163_4),
+         Q163_5 = as.factor(Q163_5),
+         Q163_6 = as.factor(Q163_6),
+         Q163_7 = as.factor(Q163_7),
+         Q163_8 = as.factor(Q163_8),
+         Q163_9 = as.factor(Q163_9),
+         Q163_10 = as.factor(Q163_10),
+         Q163_11 = as.factor(Q163_11),
+         Q163_12 = as.factor(Q163_12),
+         Q163_13 = as.factor(Q163_13))  
+
+tell$Q163_1 <- recode_factor(tell$Q163_1, "1" = "Teacher") 
+tell$Q163_2 <- recode_factor(tell$Q163_2, "1" = "Doctor or Nurse")
+tell$Q163_3 <-recode_factor(tell$Q163_3, "1" = "Parent")
+tell$Q163_4 <-recode_factor(tell$Q163_4, "1" = "Extracurricular Adult") 
+tell$Q163_5 <-recode_factor(tell$Q163_5, "1" = "Friend")
+tell$Q163_6 <-recode_factor(tell$Q163_6, "1" = "Neighbor")
+tell$Q163_7 <-recode_factor(tell$Q163_7, "1" = "Counselor")
+tell$Q163_8 <-recode_factor(tell$Q163_8, "1" = "Pastor, Rabbi, Clergy")
+tell$Q163_9 <-recode_factor(tell$Q163_9, "1" = "Non-Parent Adult Relative") 
+tell$Q163_10 <-recode_factor(tell$Q163_10, "1" = "Sibling")
+tell$Q163_11 <-recode_factor(tell$Q163_11, "1" = "Cousin or Non-Adult Relative")
+tell$Q163_12 <-recode_factor(tell$Q163_12, "1" = "Other")
+tell$Q163_13 <-recode_factor(tell$Q163_13, "1" = "I choose not to answer")
+
+
+tell1 <- tell %>% 
+  pivot_longer(
+    cols = starts_with("Q163_"),
+    names_prefix = "Q163_",
+    names_to = "toss",
+    values_to = "told",
+    values_drop_na = TRUE
+)
+
+as.data.frame(tell1)
+na.omit(tell1)
 
 levels1 <- c('Strongly disagree', 'Disagree', 'Agree', 'Strongly agree')
 
@@ -261,7 +282,6 @@ tell_lik <- raw %>%
 
 
 ```{r likertdata, echo=FALSE, tidy = TRUE}
-
 tell_likresult = likert(tell_lik)
 par(mai=c(12,8,8,12))
 tellplot <- plot(tell_likresult, type = "bar",
@@ -275,8 +295,7 @@ tellplot <- plot(tell_likresult, type = "bar",
 tellplot
 ```
 ---
-class: center, middle
-Plot 2.2
+
 ```{r likert1, echo=FALSE}
 
 
@@ -308,6 +327,7 @@ sum_table <- tell_lik_long %>%
   ungroup()
 
   
+View(sum_table)
 
 # mutate(count = sum(n)) %>%
 #   ungroup() %>% 
@@ -324,49 +344,7 @@ ggplot(sum_table, aes(question, pct)) +
 ```
 
 
----
-class: center, middle
-
-Plot 2.2
-
 ```{r likert2}
-
-levels2 <- c('Strongly agree', 'Agree', 'Disagree', 'Strongly disagree')
-
-
-sum_table <- sum_table %>%
-  mutate(category = fct_relevel(category, levels2))
-
-ggplot(sum_table, aes(question, pct)) +
-  geom_col(aes(fill = category))  +
-  scale_fill_brewer(palette = "Paired") +
-  coord_flip() +
-  
-  scale_x_discrete(labels = wrap_format(20)) + 
-    geom_vline(aes(xintercept = 50), 
-               color = "grey70",
-               linetype = 4) +
-  ylim(-5, 100) +
-  labs(
-    title = "Responses After Students Disclose Their Experience",
-        x = "Percent",
-        y = NULL,
-        subtitle ="Overall, when students tell someone about an experience, people respond positively."
-  ) +
-  theme(aspect.ratio = .5,
-    axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(),
-    legend.position = "bottom",
-    legend.title = element_blank()) 
-  
-
-```
----
-class: middle, center
-
-Plot2.3
-```{r likert3}
 
 levels2 <- c('Strongly agree', 'Agree', 'Strongly disagree', 'Disagree')
 
@@ -417,203 +395,154 @@ ggplot(aes(question, pct)) +
 ```
 
 
----
-class: center, middle
+```{r likert3}
 
-Plot3.1
+levels2 <- c('Strongly agree', 'Agree', 'Disagree', 'Strongly disagree')
+
+
+sum_table <- sum_table %>%
+  mutate(category = fct_relevel(category, levels2))
+
+ggplot(sum_table, aes(question, pct)) +
+  geom_col(aes(fill = category))  +
+  scale_fill_brewer(palette = "Paired") +
+  coord_flip() +
+  
+  scale_x_discrete(labels = wrap_format(20)) + 
+    geom_vline(aes(xintercept = 50), 
+               color = "grey70",
+               linetype = 4) +
+  ylim(-5, 100) +
+  labs(
+    title = "Responses After Students Disclose Their Experience",
+        x = "Percent",
+        y = NULL,
+        subtitle ="Overall, when students tell someone about an experience, people respond positively."
+  ) +
+  theme(aspect.ratio = .5,
+    axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+    legend.position = "bottom",
+    legend.title = element_blank()) 
+  
+
+```
+
+```{r likert plot, echo=FALSE, tidy = TRUE}
+
+ods %>%
+ggplot(aes(district, as.factor(Q2))) +
+    geom_tile(aes(fill = PATOTR))
+```
+---
 ```{r echo=FALSE}
 
-
-# ods %>%
-#   filter(Q28 == "Strongly Agree" |
-#            Q28 == "Strongly Disagree" |
-#            Q28 == "Disagree" |
-#            Q28 == "Agree") %>% 
-#   mutate(adults = fct_recode(Q28,
-#                              "Yes" = 'Strongly Agree',
-#                              "Yes" = 'Agree',
-#                              "No" = 'Strongly Disagree',
-#                              "No" = 'Disagree')) %>% 
-# ggplot(aes(district, as.factor(adults))) +
-#     geom_tile(aes(fill = PATOTR)) +
-#   scale_fill_viridis_c() +
-#   labs(
-#     fill = "Physical Abuse Score",
-#     x = NULL,
-#     y = NULL,
-#     title = "Abuse Scores Vary by Perceived Safe Adults and District"
-#   ) +
-#   theme(
-#     legend.position = "bottom"
-#   )
-
-
-```
-
-```{r include=FALSE}
-
-
-radar <- raw %>%
-  mutate(district = factor(Q1),
-         district = dplyr::recode(district,
-                                'Siuslaw High School' = "Siuslaw",
-                                'McKenzie High School' = "McKenzie",
-                                'South Eugene High School' = "4J",
-                                'Oakridge High School' = "Oakridge",
-                                'Willamette High School' = "Bethel",
-                                'Early College & Career Options (ECCO)' = "4J"),
-        Q163_1 = as.factor(Q163_1),
-         Q163_2 = as.factor(Q163_2),
-         Q163_3 = as.factor(Q163_3),
-         Q163_4 = as.factor(Q163_4),
-         Q163_5 = as.factor(Q163_5),
-         Q163_6 = as.factor(Q163_6),
-         Q163_7 = as.factor(Q163_7),
-         Q163_8 = as.factor(Q163_8),
-         Q163_9 = as.factor(Q163_9),
-         Q163_10 = as.factor(Q163_10),
-         Q163_11 = as.factor(Q163_11),
-         Q163_12 = as.factor(Q163_12),
-         Q163_13 = as.factor(Q163_13)) %>% 
-  group_by(district) %>% 
-  mutate(
-    'Adverse Childhood Experiences' = mean(ACETOT),
-    'Physical Abuse' = mean(PATOTR),
-    'Sexual Abuse' = mean(SATOT)) %>% 
-  ungroup()
-
-radar$Q163_1 <- recode_factor(radar$Q163_1, "1" = "Teacher") 
-radar$Q163_2 <- recode_factor(radar$Q163_2, "1" = "Doctor or Nurse")
-radar$Q163_3 <-recode_factor(radar$Q163_3, "1" = "Parent")
-radar$Q163_4 <-recode_factor(radar$Q163_4, "1" = "Extracurricular Adult") 
-radar$Q163_5 <-recode_factor(radar$Q163_5, "1" = "Friend")
-radar$Q163_6 <-recode_factor(radar$Q163_6, "1" = "Neighbor")
-radar$Q163_7 <-recode_factor(radar$Q163_7, "1" = "Counselor")
-radar$Q163_8 <-recode_factor(radar$Q163_8, "1" = "Pastor, Rabbi, Clergy")
-radar$Q163_9 <-recode_factor(radar$Q163_9, "1" = "Non-Parent Adult Relative") 
-radar$Q163_10 <-recode_factor(radar$Q163_10, "1" = "Sibling")
-radar$Q163_11 <-recode_factor(radar$Q163_11, "1" = "Cousin or Non-Adult Relative")
-radar$Q163_12 <-recode_factor(radar$Q163_12, "1" = "Other")
-radar$Q163_13 <-recode_factor(radar$Q163_13, "1" = "I choose not to answer")
-  
-radar <- radar %>% 
-  select(c("Adverse Childhood Experiences", "Physical Abuse", "Sexual Abuse", PATOTR, SATOT, ACETOT,Q28, district, Q12, starts_with("Q163_"), starts_with("Q3_"))) %>% 
-  pivot_longer(
-    cols = c("Adverse Childhood Experiences", "Physical Abuse", "Sexual Abuse"),
-    names_to = "experience",
-    values_to = "mean_scores",
-    values_drop_na = TRUE)
-
-radar <- radar %>% 
-  pivot_longer(
-    cols = starts_with("Q163_"),
-    names_prefix = "Q163_",
-    names_to = "toss",
-    values_to = "told",
-    values_drop_na = TRUE
-)
-
-radar <- radar %>% 
-    pivot_longer(
-    cols = c("Q3_1":"Q3_7", "Q3_8":"Q3_10"),
-    names_to = "toss1",
-    values_to =  "stu_gender",
-    values_drop_na = TRUE
-  ) 
-
-radar <- radar %>% 
-  mutate(stu_gender = as.factor(stu_gender),
-    stu_gender = fct_recode(stu_gender,
-             "Male"= '1',
-             "Female" = '2',
-             "Non-binary" = '3',
-             "Non-binary" = '4',
-             "Non-binary" ='5',
-             "Non-binary" = '8',
-              "NA" = '9')) %>% 
-  rename(Gender = stu_gender)
-
-as.data.frame(radar)
-
-```
-
-
-```{r plot3.1}
-
-radar %>%
-  filter(Q28 == "Strongly Agree" |
-           Q28 == "Strongly Disagree" |
-           Q28 == "Disagree" |
-           Q28 == "Agree") %>% 
-  mutate(adults = fct_recode(Q28,
-                             "Yes" = 'Strongly Agree',
-                             "Yes" = 'Agree',
-                             "No" = 'Strongly Disagree',
-                             "No" = 'Disagree')) %>% 
-ggplot(aes(told, adults)) +
+ods %>%
+ggplot(aes(district, as.factor(Q2))) +
     geom_tile(aes(fill = PATOTR)) +
-  scale_fill_viridis_c() +
+  scale_fill_continuous(type = "viridis") +
   labs(
     fill = "Physical Abuse Score",
     x = NULL,
-    y = "Placement in Foster Care",
-    title = "How Foster Care Placement Relates to Who Students Tell About Experiences"
+    y = NULL,
+    title = "Abuse Scores Vary by District and Age"
   ) +
   theme(
-    legend.position = "bottom",
-    axis.text.x = element_text(angle = 45, hjust = 1))
-
-
+    legend.position = "bottom"
+  )
 ```
 ---
-class: center, middle
-
-Plot 3.2
-```{r plot3.2}
-
-ggplot(radar, aes(x = told, y = mean_scores, colour = Q12, group = Q12)) +
-  geom_line() +
-  coord_polar(theta = "x", direction = ) +
-  scale_y_continuous() +
-  scale_x_discrete(labels = wrap_format(10)) +
+```{r include=FALSE}
+pl1 <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+ggplot(aes(Q62)) +
+  geom_bar(fill = "cornflowerblue") +
   labs(
-    title = ""
+    x = NULL,
+    title = "Harrassed because of race or ethnicity."
+  ) 
+
+pl2 <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+ggplot(aes(Q63)) +
+  geom_bar(fill = "yellow") +
+  labs(
+    x = NULL,
+    title = "Harassed because someone said you were gay, lesbian, bisexual, or transgenderof race or ethnicity."
+  ) 
+
+pl3 <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+ggplot(aes(Q64)) +
+  geom_bar(fill = "purple") +
+  labs(
+    x = NULL,
+    title = "Harassed because of who your friends are."
   )
-  theme(
-    axis.text.y.left = element_text(vjust = 5),
-    axis.title.y = element_blank()
+
+pl4 <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+ggplot(aes(Q65)) +
+  geom_bar(fill = "green") +
+  labs(
+    x = NULL,
+    title = "Harassed because of how you look (weight, clothes, acne, or other physical characteristics)."
+  )
+
+pl5 <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+ggplot(aes(Q66)) +
+  geom_bar(fill = "orange") +
+  labs(
+    x = NULL,
+    title = "Harassed because you received unwanted sexual comments or attention."
   )
 
 ```
+
+
+```{r echo=FALSE}
+gridExtra::grid.arrange(pl1, pl2, pl3, pl4, pl5, nrow=2) 
+
+```
+
+
 ---
-class:center, middle
-Plot 3.3
-```{r}
+```{r eval=FALSE, include=TRUE}
 
-ggplot(radar, aes(x = told)) +
-  geom_bar(aes(fill = Q12), width = 1, color = "white") +
-  coord_polar() + 
-  scale_fill_manual(values = c("#a1d99b", "#31a354")) +
-  scale_x_discrete(labels = wrap_format(10)) +
-  labs(title = "Students are Most Likely to Disclose to Friends",
-       y = NULL,
-       x = NULL,
-       fill = "Foster Care") +
-  theme(axis.text.y.left = element_text(vjust = 5),
-    axis.title.y = element_blank(),
-    axis.title.x = element_blank(),
-    axis.text.x = element_text(size=10),
-    axis.text.y = element_text(size = 10, hjust = -2),
-    plot.title = element_text(hjust= 1, vjust =3, size = 15))
+likertdata <- raw %>% 
+  select("Q62":"Q67") %>% 
+  drop_na() %>% 
+  mutate(Q62 = as.factor(Q62),
+         Q63 = as.factor(Q63),
+         Q64 = as.factor(Q64),
+         Q65 = as.factor(Q65),
+         Q66 = as.factor(Q66),
+         Q67 = as.factor(Q67))
+
+likertdata %>% 
+  mutate(Q62= fct_recode(Q62,
+                         `0 Times (Never)` ="Never",
+                              `1 time` = "1 Time",
+                              `2 to 5 times` = "2 to 5 Times",
+                              `6 to 12 times` = "6 to 12 Times",
+                              `13 or more times (Very Frequently)` = "13 or More Times",
+                              `I choose not to answer` ="Choose not to answer"))
+
+
+likert_result = likert(likertdata)
+plot(likert_result, type = "bar",
+     cex.lab = 0.3,
+     main = "Higher Order Thinking Skills")
 
 ```
 
-
-  
-
-
-  
-```
 
 ---
 class: center, middle
