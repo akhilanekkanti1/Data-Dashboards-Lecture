@@ -4,3 +4,5 @@
 .Ruserdata
 .DS_Store
 raw-data/
+data/
+slides_draft.Rmd
