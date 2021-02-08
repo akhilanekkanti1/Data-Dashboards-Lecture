@@ -46,14 +46,48 @@ style_mono_light(
 )
 ```
 
+#Why use a dashboard?
+https://ramikrispin.github.io/coronavirus_dashboard/
 
-## Policymakers rely on publically available, easily digestible data to allocate funds and resources. It is critical then, that such data is accurate. 
+![](img/covid19.png)
+---
 
---
+#Why use a dashboard?
+http://jkunst.com/flexdashboard-highcharter-examples/pokemon/
 
+![](img/pokemon.png)
 
-In Oregon these data are dependent on either retrospective surveys with adults (Oregon BRFFS), youth convenience sample surveys with fewer than 10 abuse and neglect items (Oregon Healthy Teens Survey, Oregon Student Wellness Survey), and reports to child protective services (Children’s Bureau, 2019). 
+---
+#Why use a dashboard?
+http://jkunst.com/flexdashboard-highcharter-examples/pokemon/
 
+![](img/pokemon.png)
+
+---
+#Why use a dashboard?
+https://jim-wright90.github.io/data_sci_capstone_project/
+
+![](img/jim.png)
+---
+
+# Where to start?
+https://rmarkdown.rstudio.com/flexdashboard/
+
+![](img/flexdash.png)
+
+---
+#Where to start?
+
+Workflow!
+
+Your future-self will thank you if you set yourself up for the *option* to make your dashboard public.
+-- 
+
+1. New Project
+2. New Rmarkdown from template {flexdashboards}
+3. Knit
+4. Github Repo
+5. Link local and remote with GitKraken (Open)
 
 ---
 class: left, middle
