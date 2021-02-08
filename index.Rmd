@@ -128,7 +128,7 @@ Open:
 ---
 class: center, middle
 
-#1. Create a new Project
+##1. Create a new Project
 
 File > New Project > New Directory
 
@@ -139,7 +139,12 @@ File > New Project > New Directory
 ---
 class: center, middle
 
-#2. Create a new Rmarkdown from template
+##2. Create a new Rmarkdown from template
+
+```{r install, echo = TRUE, eval = FALSE}
+#One time only
+install.packages("flexdashboard")
+```
 
 ![](img/newrmd.gif)
 
