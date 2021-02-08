@@ -67,7 +67,11 @@ http://jkunst.com/flexdashboard-highcharter-examples/pokemon/
 #Why use a dashboard?
 https://jim-wright90.github.io/data_sci_capstone_project/
 
-![](img/jim.png)
+*include image after getting Jim's approval
+
+---
+#Maria's example
+
 ---
 
 # Where to start?
@@ -78,90 +82,73 @@ https://rmarkdown.rstudio.com/flexdashboard/
 ---
 #Where to start?
 
+--
+
 Workflow!
 
-Your future-self will thank you if you set yourself up for the *option* to make your dashboard public.
--- 
+--
 
-1. New Project
-2. New Rmarkdown from template {flexdashboards}
-3. Knit
-4. Github Repo
-5. Link local and remote with GitKraken (Open)
-
----
-class: left, middle
-
-**To get a better picture of how abuse and neglect rates in Lane County look, the OCAP study directly asks high school students about their current and previous abuse and harrassment experiences.**
-
-I will present three plots that visualize data in informative ways for policymakers. 
+We want to make sure we have the *option* to make our dashboard public.
 
 --
-1. How abuse rates vary across school districts in Lane County.
+
+1. Create a new Project
 
 --
-2. How people in the community respond when students have disclosed their experience. 
+
+2. Create a new Rmarkdown from template {flexdashboards}
 
 --
-3. How being in foster care is associated with students' decision to tell someone, relative to their abuse score. 
+
+3. Knit right away
+
+--
+
+4. Create a github Repo
+
+--
+
+5. Link your local and remote repos with GitKraken
+
 
 ---
-class: center, middle
 
-Plot 1.1
+#Mise en place: Set yourself up.
 
-```{r plot1.1, echo=FALSE, tidy=FALSE}
-#here i'm trying to visualize how many of those who have experienced abuse have told someone about it. And whether this varies by school district. 
+--
+Open:
 
-```
----
-class: center, middle
+- R
 
-Plot 1.2
-```{r plot1.2, echo=FALSE, tidy=FALSE}
+- GitKraken
 
-
-```
-
+- Github
 
 
 ---
 class: center, middle
 
-Plot 1.3
-```{r echo=FALSE, tidy=FALSE}
+#1. Create a new Project
+
+File > New Project > New Directory
 
 
-
-```
-
-
-```{r echo=FALSE, tidy=FALSE}
-# ggplot(p, aes(x = PATOTR, y = district)) + 
-#   geom_density_ridges(aes(fill = Q162),alpha = 0.7) +
-#   scale_fill_OkabeIto() +
-#   	labs(y = NULL,
-# 	     x = "Told someone?",
-# 	     title = "Distribution of Abuse Rates",
-# 	     subtitle = "Results displayed by disclosure and school district",
-# 	     fill = NULL) 
+![](img/newproj.gif)
 
 
-```
+---
+class: center, middle
 
-```{r echo=FALSE, tidy=FALSE}
-# ggplot(p, aes(as.factor(Q162), PATOTR)) +
-# 	geom_col(aes(fill = Q162), size = 1) +
-# #   geom_violin(aes(color = Q162)) +
-#   facet_wrap(~district, ncol = 5) +
-#   scale_fill_OkabeIto()+
-# 	labs(y = "Physical Abuse Scores",
-# 	     x = "Told someone?",
-# 	     title = "Distribution of Abuse Rates",
-# 	     subtitle = "Results displayed by disclosure and school district",
-# 	     fill = NULL) 
+#2. Create a new Rmarkdown from template
 
-```
+![](img/newrmd.gif)
+
+---
+class: center, middle
+
+#3. Link your local and remote repos using GitKraken
+
+![](img/link.gif)
 
 ---
 class: center, middle
