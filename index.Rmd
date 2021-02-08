@@ -23,14 +23,7 @@ knitr::opts_chunk$set(
 	warning = FALSE
 )
 library(tidyverse)
-library(here)
-library(rio)
-library(dplyr)
-library(likert)
-library(colorblindr)
-library(ggridges)
-library(scales)
-library(fmsb)
+
 theme_set(theme_minimal(15))
 #[metropolis, metropolis-fonts]
 
@@ -52,12 +45,6 @@ https://ramikrispin.github.io/coronavirus_dashboard/
 ![](img/covid19.png)
 ---
 
-#Why use a dashboard?
-http://jkunst.com/flexdashboard-highcharter-examples/pokemon/
-
-![](img/pokemon.png)
-
----
 #Why use a dashboard?
 http://jkunst.com/flexdashboard-highcharter-examples/pokemon/
 
@@ -145,38 +132,39 @@ class: center, middle
 #One time only
 install.packages("flexdashboard")
 ```
+##3. Knit right away
 
 ![](img/newrmd.gif)
 
 ---
 class: center, middle
 
-#3. Link your local and remote repos using GitKraken
+##4. Create a GitHub repo
+##5. Link your local and remote repos using GitKraken
 
 ![](img/link.gif)
 
 ---
 class: center, middle
 
-Plot 2.1
-```{r plot2.1, include=FALSE, tidy=FALSE}
+# Ready to PUBLISH!
 
+![](img/publish.gif)
 
-
-```
-
-
-```{r likertdata, echo=FALSE, tidy = TRUE}
-
-
-```
 ---
 class: center, middle
-Plot 2.2
-```{r likert1, echo=FALSE}
 
+# Now let's play around with our dashboard! 
 
+## Try adding a different plot in each "Chart" of your dashboard. 
+```{r plots, eval = FALSE, echo= TRUE}
 
+library(tidyverse)
+
+mtcars %>% 
+  ggplot(aes(wt, mpg, col=as_factor(cyl))) +
+  geom_point() +
+  facet_grid(~cyl)
 
 ```
 
