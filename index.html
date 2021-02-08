@@ -26,19 +26,13 @@ class: center, left
 #Why use a dashboard?
 https://ramikrispin.github.io/coronavirus_dashboard/
 
-![](img/covid19.png)
+![](img/covid19.PNG)
 ---
 
 #Why use a dashboard?
 http://jkunst.com/flexdashboard-highcharter-examples/pokemon/
 
-![](img/pokemon.png)
-
----
-#Why use a dashboard?
-http://jkunst.com/flexdashboard-highcharter-examples/pokemon/
-
-![](img/pokemon.png)
+![](img/pokemon.PNG)
 
 ---
 #Why use a dashboard?
@@ -54,7 +48,7 @@ https://jim-wright90.github.io/data_sci_capstone_project/
 # Where to start?
 https://rmarkdown.rstudio.com/flexdashboard/
 
-![](img/flexdash.png)
+![](img/flexdash.PNG)
 
 ---
 #Where to start?
@@ -123,28 +117,40 @@ class: center, middle
 #One time only
 install.packages("flexdashboard")
 ```
+##3. Knit right away
 
 ![](img/newrmd.gif)
 
 ---
 class: center, middle
 
-#3. Link your local and remote repos using GitKraken
+##4. Create a GitHub repo
+##5. Link your local and remote repos using GitKraken
 
 ![](img/link.gif)
 
 ---
 class: center, middle
 
-Plot 2.1
+# Ready to PUBLISH!
 
-
-
+![](img/publish.gif)
 
 ---
 class: center, middle
-Plot 2.2
 
+# Now let's play around with our dashboard! 
+
+## Try adding a different plot in each "Chart" of your dashboard. 
+
+```r
+library(tidyverse)
+
+mtcars %&gt;% 
+  ggplot(aes(wt, mpg, col=as_factor(cyl))) +
+  geom_point() +
+  facet_grid(~cyl)
+```
 
 
 ---
