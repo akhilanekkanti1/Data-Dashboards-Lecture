@@ -38,14 +38,18 @@ http://jkunst.com/flexdashboard-highcharter-examples/pokemon/
 #Why use a dashboard?
 https://jim-wright90.github.io/data_sci_capstone_project/
 
-*include image after getting Jim's approval
+![](img/jim.PNG)
 
 ---
-#Maria's example
+#Why use a dashboard?
+
+https://github.com/akhilanekkanti1/FlexDashboards
+
+![](img/akhila.PNG)
 
 ---
 
-# Where to start?
+# The ultimate source
 https://rmarkdown.rstudio.com/flexdashboard/
 
 ![](img/flexdash.PNG)
@@ -110,22 +114,20 @@ File &gt; New Project &gt; New Directory
 ---
 class: center, middle
 
-##2. Create a new Rmarkdown from template
+##2. Create a new Rmarkdown from template and (#3) Knit
 
 
 ```r
 #One time only
 install.packages("flexdashboard")
 ```
-##3. Knit right away
 
 ![](img/newrmd.gif)
 
 ---
 class: center, middle
 
-##4. Create a GitHub repo
-##5. Link your local and remote repos using GitKraken
+##4. Create a GitHub repo and (#5) Link it with your local
 
 ![](img/link.gif)
 
@@ -139,9 +141,66 @@ class: center, middle
 ---
 class: center, middle
 
-# Now let's play around with our dashboard! 
+## Now let's play around with our dashboard! 
 
-## Try adding a different plot in each "Chart" of your dashboard. 
+
+---
+## Let's start with the YAML.
+
+
+```r
+---
+title: "Coolest DEMO EVER"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+*   social: menu
+*   source_code: https://github.com/akhilanekkanti1/dashboard_demo
+---
+```
+
+![](img/source.PNG)
+
+---
+## Let's add a new page.
+
+
+```r
+*Weird Flex
+*=========================
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+&lt; r code chunk &gt;
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+&lt; r code chunk &gt;
+  
+*But Okay
+*========================
+### Chart C
+&lt; r code chunk &gt;
+```
+
+![](img/tabs.PNG)
+---
+##Play around!
+
+- Change the name of each square
+
+- Try adding a different plot in each square
+
+- Can you change the number of squares in each page?
+
+- Can you change the size of each square?
+
+Plot example:
 
 ```r
 library(tidyverse)
@@ -152,46 +211,187 @@ mtcars %&gt;%
   facet_grid(~cyl)
 ```
 
+## 5 minutes :)
 
 ---
-class: center, middle
+##Columns
 
-Plot 2.2
+- Create a new column with
 
-
----
-class: middle, center
-
-Plot2.3
-
-
-
----
-class: center, middle
-
-Plot3.1
-
-
-
-
-
-
----
-class: center, middle
-
-Plot 3.2
-
----
-class:center, middle
-Plot 3.3
-
-
-
-  
-
-
-  
+```{}
+Column
+--------------------------------------
 ```
+
+- Change the width of each column
+  - Notice there are NO spaces around the '='
+  
+```{}
+Column {data-width=400}
+--------------------------------------
+```
+
+- Add a new square within each column
+
+```{}
+Column {data-width=400}
+--------------------------------------
+### New Square
+```
+
+---
+##Columns vs. Rows
+
+- If you want all rows:
+
+```r
+---
+title: "Coolest DEMO EVER"
+output: 
+  flexdashboard::flex_dashboard:
+*   orientation: rows
+    vertical_layout: fill
+    social: menu 
+    source_code: https://github.com/akhilanekkanti1/dashboard_demo 
+---
+```
+
+---
+##Columns vs. Rows
+
+- If you want rows for some pages and columns for other pages:
+  - don't specify the orientation
+  - **do** specify which pages should be rows
+  
+In this example, Page 1 will have rows and Page 2 will have columns.
+
+```r
+#change your yaml
+---
+title: "Coolest DEMO EVER"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows 
+*   vertical_layout: fill
+*   horizontal_layout: fill
+    social: menu 
+    source_code: https://github.com/akhilanekkanti1/dashboard_demo 
+---
+
+
+*Page 1 {data-orientation=rows}
+*===============================
+
+      
+*Page 2
+*===============================
+```
+
+---
+##Rows
+
+- Create a new row with
+
+```{}
+Row
+--------------------------------------
+```
+
+- Change the width of each row
+  - Notice there are NO spaces around the '='
+  
+```{}
+Row {data-height=400}
+--------------------------------------
+```
+
+- Add a new square within each row
+
+```{}
+Row {data-height=400}
+--------------------------------------
+### New Square
+```
+
+---
+# You can also add a sidebar!
+
+Here's an example from my dashboard.
+![](img/akhila.PNG)
+
+---
+# You can also add a sidebar!
+
+- If you want the sidebar on all pages:
+
+```{}
+Sidebar Title {.sidebar}
+===================================
+
+This Dashboard is Important. 
+
+RMarkdown syntax works here! 
+
+[Click here](https://youtu.be/dQw4w9WgXcQ). 
+
+```
+
+
+- If you want the sidebar on just one page:
+
+```{}
+
+Sidebar Title {.sidebar}
+------------------------------
+```
+
+---
+#What if you want to organize your columns even more?
+
+You can use tabs:
+![](img/minitabs_LI.jpg)
+
+---
+## Use tabset to split your columns or rows into tabs.
+
+
+```r
+*Column {.tabset}
+-------------------------------------
+
+*### Part 1
+
+&lt;r code chunk&gt;
+
+*### Part 2
+
+&lt;r code chunk&gt;
+
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### OH la la, Final Plot
+```
+
+- For multiple arguments, there's no comma in between.
+
+```{}
+Column {.tabset data-width=350}
+-------------------------------------
+```
+
+---
+#to do
+
+- interactive plots
+- icons
+- including text
+- storyboards
+- theme cusotmization and css
+- adding logo and favicon
+
+
 
 ---
 class: center, middle
@@ -205,7 +405,7 @@ The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihu
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
+"highlightStyle": "atelier-dune-light",
 "highlightLines": true,
 "countIncrementalSlides": false
 });
