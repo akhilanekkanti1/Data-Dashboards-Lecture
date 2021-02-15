@@ -232,6 +232,24 @@ mtcars %>%
 ## 5 minutes :)
 
 ---
+##Want to add some text?
+
+Just add it in like you would for a typical Rmarkdown doc.
+
+```{r eval=FALSE, echo=TRUE}
+
+# Page 1
+
+Check out this plot I made. 
+
+### Plot A
+
+<R code for your plot>
+
+```
+
+
+---
 ##Columns
 
 - Create a new column with
@@ -280,7 +298,7 @@ output:
 
 - If you want rows for some pages and columns for other pages:
   - don't specify the orientation
-  - **do** specify which pages should be rows
+  - **do** add 'data-orientation' when you name your pages.
   
 In this example, Page 1 will have rows and Page 2 will have columns.
 ```{r eval=FALSE, echo= TRUE}
@@ -289,7 +307,6 @@ In this example, Page 1 will have rows and Page 2 will have columns.
 title: "Coolest DEMO EVER"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows 
     vertical_layout: fill #<<
     horizontal_layout: fill #<<
     social: menu 
@@ -340,7 +357,7 @@ Here's an example from my dashboard.
 ---
 # You can also add a sidebar!
 
-- If you want the sidebar on all pages:
+If you want the sidebar on all pages:
 
 ```{}
 Sidebar Title {.sidebar}
@@ -355,7 +372,7 @@ RMarkdown syntax works here!
 ```
 
 
-- If you want the sidebar on just one page:
+If you want the sidebar on just one page:
 
 ```{}
 
@@ -391,7 +408,7 @@ Column {data-width=650}
 ### OH la la, Final Plot
 ```
 
-- For multiple arguments, there's no comma in between.
+**For multiple arguments, there's no comma in between.**
 
 ```{}
 Column {.tabset data-width=350}
@@ -399,15 +416,168 @@ Column {.tabset data-width=350}
 ```
 
 ---
-#to do
+#Interactivity!
 
-- interactive plots
-- icons
-- including text
-- storyboards
-- theme cusotmization and css
-- adding logo and favicon
+You can use {reactable} or {plotly} to make your tables or plots interactive!
 
+Here's a simple example:
+
+```{r echo=TRUE, include=TRUE}
+
+p <- mtcars %>% 
+  ggplot(aes(wt, mpg)) +
+  geom_point() 
+
+plotly::ggplotly(p)
+
+
+reactable::reactable(mtcars)
+
+```
+
+---
+#Interactivity!
+
+If you have more than one page, make it *shiny*!
+
+[{shiny}](https://shiny.rstudio.com/tutorial/*) allows you to make interactive web applications with R. 
+
+First, change your YAML.
+
+```{r echo=TRUE, eval=FALSE}
+
+---
+title: "Coolest DEMO EVER"
+runtime: shiny #<<
+output: 
+  flexdashboard::flex_dashboard:
+
+```
+
+Next, assign your interactive plot or table to an object, and **render**.
+
+```{r echo=TRUE, eval=FALSE}
+
+renderPlotly(plot1)
+
+renderReactable(table1)
+
+```
+
+---
+#I know what you're thinking.
+
+Interactivity isn't enough. How can I make my dashboard even cooler?
+
+### I have the answer. Icons. 
+
+I recommend using [Fontawesome icons](https://fontawesome.com/icons?d=gallery).But you can also use [ionicons](https://ionicons.com/).
+
+```{r eval=FALSE, echo=TRUE}
+
+#Use the prefix "fa" for fontawesome icons or "ion" for ionicons.
+
+Weird Flex {data-icon="fa-code-branch"}
+=================================
+
+```
+
+![](img/icon.PNG)
+
+
+---
+# Want a logo?
+
+So simple, my friends. Download a fontawesome icon to your project folder, and change your YAML.
+
+Check the size of your png file!
+
+```{r echo=TRUE, eval=FALSE}
+
+---
+title: "Coolest DEMO EVER"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    logo: coolpic.png #<<
+    favicon: coolicon.png #<<
+    social: menu
+    source_code: https://github.com/akhilanekkanti1/dashboard_demo
+    
+---
+
+```
+
+---
+# Storyboards 
+
+![](img/storyboard.PNG)
+
+---
+# Storyboard all the way.
+
+1. First, change your YAML. 
+2. Use level 3 headers (###) for each frame in your storyboard.
+
+```{r eval=FALSE, echo=TRUE}
+---
+title: "Storyboard"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true #<<
+---
+
+### Frame 1 #<<
+
+### Frame 2 #<<
+
+### Frame 3 #<<
+
+```
+
+---
+# Storyboard all the way.
+
+![](img/storyboard1.PNG)
+
+---
+# Storyboards on just one page.
+
+1. Just add {.storyboard} to your page title.
+
+```{r eval=FALSE, echo=TRUE}
+            
+Cool Story {.storyboard}  #<<   
+========================== #<<
+### Frame 1 #<<
+
+### Frame 2 #<<
+      
+```
+
+![](img/storypage.PNG)
+
+---
+#Last but not least, [themes](https://rmarkdown.rstudio.com/flexdashboard/using.html#themes)!
+
+https://rmarkdown.rstudio.com/flexdashboard/using.html#themes
+
+```{r eval=FALSE, echo=TRUE}
+
+---
+title: "Coolest DEMO EVER"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    theme: united #<<
+    social: menu
+    source_code: https://github.com/akhilanekkanti1/dashboard_demo
+    
+---
+
+```
 
 
 ---
